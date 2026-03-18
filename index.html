@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Guía rápida e interactiva sobre Conventional Commits. Aprende a escribir el historial de Git perfecto con nuestro generador de commits.">
+    <meta property="og:title" content="Conventional Commits — Guía Rápida">
+    <meta property="og:description"
+        content="Guía práctica con generador interactivo, flowchart y ejemplos para estandarizar tus mensajes de commit.">
+    <meta property="og:type" content="website">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+    <title>Conventional Commits — Guía Rápida</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@500;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d0f;
+            --surface: #141416;
+            --surface2: #1a1a1e;
+            --border: rgba(255, 255, 255, 0.07);
+            --border2: rgba(255, 255, 255, 0.13);
+            --text: #e8e8ec;
+            --muted: #6b6b7a;
+            --accent: #7c6af7;
+            --green: #3ecf8e;
+            --green-dim: rgba(62, 207, 142, 0.1);
+            --amber: #f59e0b;
+            --amber-dim: rgba(245, 158, 11, 0.1);
+            --red: #f87171;
+            --red-dim: rgba(248, 113, 113, 0.1);
+            --blue: #60a5fa;
+            --blue-dim: rgba(96, 165, 250, 0.1);
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', system-ui, sans-serif;
+            --display: 'Syne', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .header-tag {
+            font-family: var(--display);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            font-size: 15px;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(124, 106, 247, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 106, 247, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* FIX: sin line-height:1, los descenders (g, p, y) no se cortan */
+        code {
+            font-family: var(--mono);
+            font-size: 0.84em;
+            padding: 3px 7px;
+            border-radius: 4px;
+            background: var(--surface2);
+            color: inherit;
+            display: inline;
+        }
+
+        /* ── HEADER ── */
+        header {
+            padding: 64px 0 48px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 56px;
+        }
+
+        .header-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-tag::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* FIX: line-height más generoso, letter-spacing menos agresivo */
+        h1 {
+            font-size: 64px;
+            /* Aumentado ligeramente el tamaño para darle más presencia */
+            font-weight: 500;
+            /* Bajamos a 500. Syne es muy "aplastada" en grosores altos */
+            line-height: 1;
+            letter-spacing: normal;
+            margin-bottom: 16px;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        .header-desc {
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 520px;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+        }
+
+        .section-header .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .section-header .badge {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            border: 1px solid var(--border2);
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        /* ── FORMAT BLOCK ── */
+        .format-block {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .format-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 12px 12px 0 0;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .format-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        pre {
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 2;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .ph {
+            color: var(--accent);
+        }
+
+        .ph-opt {
+            color: var(--muted);
+        }
+
+        .ph-key {
+            color: var(--green);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            color: var(--muted);
+            border-radius: 5px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-family: var(--mono);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        /* ── SPECIAL COMMITS ── */
+        .special-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .special-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+        }
+
+        .special-card h3 {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-family: var(--mono);
+            margin-bottom: 10px;
+        }
+
+        .special-card code {
+            display: block;
+            font-size: 12px;
+            line-height: 1.9;
+            padding: 8px 12px 10px;
+            border-radius: 6px;
+            background: var(--surface2);
+            color: var(--text);
+            word-break: break-all;
+            vertical-align: baseline;
+        }
+
+        /* ── TYPES GRID ── */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 8px 14px;
+        }
+
+        .filter-icon {
+            color: var(--muted);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .filter-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 13px;
+            flex: 1;
+            caret-color: var(--accent);
+            width: 100%;
+        }
+
+        .filter-input::placeholder {
+            color: var(--muted);
+        }
+
+        .types-grid {
+            display: grid;
+            gap: 6px;
+        }
+
+        .type-row {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: clip;
+            transition: border-color 0.2s;
+        }
+
+        .type-row:hover {
+            border-color: var(--border2);
+        }
+
+        .type-row.hidden {
+            display: none;
+        }
+
+        .type-tag {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.02em;
+        }
+
+        .type-desc {
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--muted);
+            border-left: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            line-height: 1.5;
+        }
+
+        .t-feat {
+            background: var(--green-dim);
+            color: var(--green);
+        }
+
+        .t-fix {
+            background: var(--red-dim);
+            color: var(--red);
+        }
+
+        .t-refactor {
+            background: var(--blue-dim);
+            color: var(--blue);
+        }
+
+        .t-perf {
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+        }
+
+        .t-style {
+            background: rgba(167, 139, 250, 0.10);
+            color: #a78bfa;
+        }
+
+        .t-test {
+            background: rgba(52, 211, 153, 0.08);
+            color: #34d399;
+        }
+
+        .t-docs {
+            background: rgba(148, 163, 184, 0.10);
+            color: #94a3b8;
+        }
+
+        .t-build {
+            background: rgba(251, 146, 60, 0.08);
+            color: #fb923c;
+        }
+
+        .t-ops {
+            background: rgba(34, 211, 238, 0.08);
+            color: #22d3ee;
+        }
+
+        .t-chore {
+            background: rgba(148, 163, 184, 0.06);
+            color: #64748b;
+        }
+
+        /* ── RULES LIST ── */
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--muted);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            line-height: 1.8;
+        }
+
+        .rule-item:last-child {
+            border-bottom: none;
+        }
+
+        .rule-icon {
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        /* ── BREAKING + HOTFIX ── */
+        .breaking-box {
+            background: var(--red-dim);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .breaking-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 8px;
+        }
+
+        .breaking-box p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-top: 8px;
+        }
+
+        .breaking-box code {
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--red);
+        }
+
+        .hotfix-box {
+            background: var(--amber-dim);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 10px;
+            padding: 20px 24px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .hotfix-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--amber);
+            margin-bottom: 8px;
+        }
+
+        .hotfix-box p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-top: 8px;
+        }
+
+        .hotfix-box code {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--amber);
+        }
+
+        .hotfix-example {
+            margin-top: 14px;
+            background: var(--surface);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 6px;
+            padding: 12px 16px 14px;
+            font-family: var(--mono);
+            font-size: 12px;
+            line-height: 2;
+            color: var(--amber);
+        }
+
+        .hotfix-note {
+            color: var(--muted);
+        }
+
+        /* ── VERSIONING TABLE ── */
+        .version-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .version-table th {
+            font-family: var(--mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+            text-align: left;
+            padding: 8px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .version-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            line-height: 1.8;
+        }
+
+        .version-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .version-table code {
+            font-size: 11px;
+        }
+
+        .bump {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px 5px;
+            border-radius: 99px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .bump-major {
+            background: var(--red-dim);
+            color: var(--red);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+        }
+
+        .bump-minor {
+            background: var(--green-dim);
+            color: var(--green);
+            border: 1px solid rgba(62, 207, 142, 0.2);
+        }
+
+        .bump-patch {
+            background: var(--blue-dim);
+            color: var(--blue);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        /* ── FLOWCHART ── */
+        .flow-container {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 12px;
+            padding: 28px 32px;
+            overflow-x: auto;
+        }
+
+        .flow {
+            display: flex;
+            flex-direction: column;
+            min-width: 460px;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+        }
+
+        .flow-question {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: var(--text);
+            min-width: 260px;
+            flex-shrink: 0;
+            line-height: 1.5;
+        }
+
+        .flow-yes {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--green);
+            padding: 0 12px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .flow-result {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .flow-connector {
+            width: 1px;
+            height: 18px;
+            background: var(--border2);
+            margin-left: 32px;
+        }
+
+        .flow-no {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            margin-left: 32px;
+            margin-bottom: 2px;
+            font-style: italic;
+        }
+
+        /* ── EXAMPLES ── */
+        .examples-hint {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .examples-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .example-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: var(--mono);
+            font-size: 12px;
+            line-height: 1.7;
+            color: var(--text);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .example-item:hover {
+            border-color: var(--border2);
+            background: var(--surface2);
+        }
+
+        .example-item.copied {
+            border-color: var(--green);
+        }
+
+        .example-prefix {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            line-height: 1.4;
+            margin-top: 1px;
+        }
+
+        .example-text {
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .example-copy {
+            font-size: 10px;
+            color: var(--muted);
+            flex-shrink: 0;
+            margin-top: 2px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .example-item:hover .example-copy {
+            opacity: 1;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0 48px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-refs {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .footer-refs span {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 2px;
+        }
+
+        .footer-refs a {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .footer-refs a:hover {
+            color: var(--accent);
+        }
+
+        .footer-note {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        .footer-note a {
+            color: var(--accent);
+            text-decoration: none;
+            font-family: var(--mono);
+            font-size: 11px;
+        }
+
+        /* ── TOC Y GENERADOR ── */
+        .toc {
+            margin-bottom: 48px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        @media (min-width: 1280px) {
+            .toc {
+                position: fixed;
+                top: 50%;
+                left: calc(50% - 430px - 170px);
+                transform: translateY(-50%);
+                width: 150px;
+                flex-direction: column;
+                background: transparent;
+                border: none;
+                padding: 0;
+                align-items: flex-end;
+                z-index: 100;
+            }
+
+            .toc a {
+                width: 100%;
+                text-align: right;
+            }
+        }
+
+        .toc a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            background: transparent;
+        }
+
+        .toc a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .toc a.active {
+            color: var(--accent);
+            background: rgba(124, 106, 247, 0.15);
+            font-weight: 500;
+        }
+
+        .generator-card {
+            background: var(--surface);
+            border: 1px dashed var(--border2);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .gen-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .gen-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .gen-input-group label {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .gen-control {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: var(--sans);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .gen-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(124, 106, 247, 0.2);
+        }
+
+        .gen-select {
+            font-family: var(--mono);
+        }
+
+        .gen-options-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .gen-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text);
+            user-select: none;
+        }
+
+        .gen-checkbox input {
+            accent-color: var(--red);
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .gen-preview {
+            background: var(--surface2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            font-family: var(--mono);
+            font-size: 14px;
+            color: var(--text);
+            word-break: break-all;
+            margin-bottom: 16px;
+            min-height: 54px;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        /* ── FADE IN ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(14px);
+            animation: fadeIn 0.45s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .fade-in:nth-child(1) {
+            animation-delay: 0.04s;
+        }
+
+        .fade-in:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .fade-in:nth-child(3) {
+            animation-delay: 0.12s;
+        }
+
+        .fade-in:nth-child(4) {
+            animation-delay: 0.16s;
+        }
+
+        .fade-in:nth-child(5) {
+            animation-delay: 0.20s;
+        }
+
+        .fade-in:nth-child(6) {
+            animation-delay: 0.24s;
+        }
+
+        .fade-in:nth-child(7) {
+            animation-delay: 0.28s;
+        }
+
+        .fade-in:nth-child(8) {
+            animation-delay: 0.32s;
+        }
+
+        .fade-in:nth-child(9) {
+            animation-delay: 0.36s;
+        }
+
+        .fade-in:nth-child(10) {
+            animation-delay: 0.40s;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            header {
+                padding: 40px 0 32px;
+            }
+
+            .type-row {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .special-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .format-block {
+                padding: 18px 16px;
+            }
+
+            pre {
+                font-size: 11.5px;
+            }
+
+            .flow-container {
+                padding: 18px 16px;
+            }
+
+            .flow {
+                min-width: 0;
+                /* Quita el desborde horizontal (scroll) */
+            }
+
+            .flow-step {
+                flex-wrap: wrap;
+                gap: 6px 0;
+            }
+
+            .flow-question {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .flow-yes {
+                padding: 0 12px 0 20px;
+            }
+
+            .flow-connector,
+            .flow-no {
+                margin-left: 20px;
+            }
+
+            .version-table {
+                font-size: 12px;
+            }
+
+            .version-table th,
+            .version-table td {
+                padding: 8px 10px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+
+            .footer-note {
+                text-align: left;
+            }
+
+            .breaking-box,
+            .hotfix-box {
+                padding: 16px;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <div class="header-tag">conventional commits · guía rápida</div>
+            <h1>Mensajes de <span>commit</span> con sentido</h1>
+            <p class="header-desc">Un pequeño cambio en el formato de tus mensajes de commit puede transformar la
+                legibilidad del historial de tu proyecto.</p>
+        </header>
+
+        <nav class="toc fade-in">
+            <a href="#generador">Generador</a>
+            <a href="#formato">Formato</a>
+            <a href="#tipos">Tipos validos</a>
+            <a href="#ambito">Ámbito (Scope)</a>
+            <a href="#breaking">Breaking changes</a>
+            <a href="#trailers">Trailers / Metadatos</a>
+            <a href="#flowchart">Decision Flowchart</a>
+            <a href="#ejemplos">Ejemplos para copiar</a>
+        </nav>
+
+        <section id="generador" class="fade-in" style="animation-delay: 0.1s;">
+            <div class="section-header">
+                <h2>Generador de Commits</h2>
+                <div class="line"></div>
+                <div class="badge">Interactivo</div>
+            </div>
+            <div class="generator-card">
+                <div class="gen-inputs">
+                    <div class="gen-input-group" style="flex: 0 1 120px;">
+                        <label>Tipo *</label>
+                        <select class="gen-control gen-select" id="g-type" onchange="updatePreview()">
+                            <option value="feat">feat</option>
+                            <option value="fix">fix</option>
+                            <option value="refactor">refactor</option>
+                            <option value="chore">chore</option>
+                            <option value="docs">docs</option>
+                            <option value="style">style</option>
+                            <option value="test">test</option>
+                            <option value="perf">perf</option>
+                            <option value="build">build</option>
+                            <option value="ci">ci</option>
+                            <option value="ops">ops</option>
+                        </select>
+                    </div>
+                    <div class="gen-input-group" style="flex: 0 1 140px;">
+                        <label>Ámbito (opcional)</label>
+                        <input type="text" class="gen-control" id="g-scope" placeholder="ej. auth"
+                            oninput="updatePreview()">
+                    </div>
+                    <div class="gen-input-group" style="flex: 1 1 200px;">
+                        <label>Descripción breve *</label>
+                        <input type="text" class="gen-control" id="g-desc" placeholder="añadir validación de email..."
+                            oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <div class="gen-options-row">
+                    <label class="gen-checkbox">
+                        <input type="checkbox" id="g-breaking" onchange="updatePreview()">
+                        <span style="color:var(--red);">Es un Breaking Change (!)</span>
+                    </label>
+                </div>
+
+                <div class="gen-input-group" style="margin-bottom: 20px;">
+                    <label>Metadato de cierre / Trailer (opcional)</label>
+                    <input type="text" class="gen-control" id="g-trailer" placeholder="ej. Resolves #123"
+                        oninput="updatePreview()">
+                </div>
+
+                <div class="gen-preview" id="g-preview">git commit -m "feat: "</div>
+
+                <button class="btn-primary" onclick="copyGenerator(this)">
+                    <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M11.5 2H4.5A1.5 1.5 0 0 0 3 3.5v9A1.5 1.5 0 0 0 4.5 14h7a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 11.5 2Zm0 1A.5.5 0 0 1 12 3.5v9a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h7Z"
+                            fill="currentColor" />
+                        <path
+                            d="M5 6.5C5 6.22 5.22 6 5.5 6h5c.28 0 .5.22.5.5S10.78 7 10.5 7h-5A.5.5 0 0 1 5 6.5Zm0 3c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5S8.78 10 8.5 10h-3A.5.5 0 0 1 5 9.5Z"
+                            fill="currentColor" />
+                    </svg>
+                    <span>Copiar comando al portapapeles</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="formato">
+            <div class="section-header">
+                <h2>Formato general</h2>
+                <div class="line"></div>
+            </div>
+            <div class="format-block">
+                <p class="format-label">estructura</p>
+                <pre><span class="ph-key">git commit</span> -m<span class="ph">"&lt;tipo&gt;(&lt;ámbito opcional&gt;): &lt;descripción&gt;"</span> \
+  -m<span class="ph-opt">"&lt;cuerpo opcional&gt;"</span> \
+  -m<span class="ph-opt">"&lt;pie de página opcional&gt;"</span></pre>
+                <button class="copy-btn" onclick="copyFormat(this)">copiar</button>
+            </div>
+            <div class="special-grid">
+                <div class="special-card">
+                    <h3>commit inicial</h3>
+                    <code>chore: init</code>
+                </div>
+                <div class="special-card">
+                    <h3>commit de merge</h3>
+                    <code>Merge branch '&lt;nombre-rama&gt;'</code>
+                </div>
+                <div class="special-card">
+                    <h3>commit de revert</h3>
+                    <code>Revert "&lt;mensaje original&gt;"</code>
+                </div>
+            </div>
+        </section>
+
+        <section id="tipos">
+            <div class="section-header">
+                <h2>Tipos de commit</h2>
+                <div class="line"></div>
+                <div class="badge">10 tipos</div>
+            </div>
+            <div class="filter-bar">
+                <span class="filter-icon">⌕</span>
+                <input class="filter-input" type="text" placeholder="filtrar tipos..."
+                    oninput="filterTypes(this.value)">
+            </div>
+            <div class="types-grid">
+                <div class="type-row fade-in">
+                    <div class="type-tag t-feat">feat</div>
+                    <div class="type-desc">Añade, ajusta o elimina una funcionalidad del API o la UI</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-fix">fix</div>
+                    <div class="type-desc">Corrige un bug en el API o la UI</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-refactor">refactor</div>
+                    <div class="type-desc">Reescribe o restructura código sin alterar el comportamiento observable</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-perf">perf</div>
+                    <div class="type-desc">Refactor enfocado específicamente en mejorar el rendimiento</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-style">style</div>
+                    <div class="type-desc">Estilo de código: espacios, formato, punto y coma omitidos… sin cambio de
+                        lógica</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-test">test</div>
+                    <div class="type-desc">Añade tests que faltan o corrige los existentes</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-docs">docs</div>
+                    <div class="type-desc">Cambios exclusivamente en la documentación</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-build">build</div>
+                    <div class="type-desc">Afecta al sistema de build, herramientas, dependencias o versión del proyecto
+                    </div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-ops">ops</div>
+                    <div class="type-desc">Infraestructura, scripts de despliegue, CI/CD, backups, monitoreo o
+                        recuperación</div>
+                </div>
+                <div class="type-row fade-in">
+                    <div class="type-tag t-chore">chore</div>
+                    <div class="type-desc">Tareas de mantenimiento: commit inicial, modificar .gitignore, etc.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ambito">
+            <div class="section-header">
+                <h2>Ámbito (scope)</h2>
+                <div class="line"></div>
+                <div class="badge">opcional</div>
+            </div>
+            <div class="rules-list">
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>El ámbito aporta contexto adicional sobre la zona del código afectada</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>Es una parte <strong>opcional</strong> del mensaje</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>Los ámbitos permitidos varían por proyecto y suelen definirse en las guías del equipo</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◇</span>
+                    <span>No uses identificadores de issues como ámbito — p.ej. <code>#123</code></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="breaking">
+            <div class="section-header">
+                <h2>Breaking changes</h2>
+                <div class="line"></div>
+            </div>
+            <div class="breaking-box">
+                <div style="font-size:20px;flex-shrink:0;margin-top:2px;">⚠</div>
+                <div>
+                    <h3>Cambios incompatibles</h3>
+                    <p>Un commit que introduce un cambio incompatible debe marcarse con <code>!</code> antes del
+                        <code>:</code> en el asunto.
+                    </p>
+                    <p>Ejemplo: <code>feat(api)!: eliminar endpoint de estado</code></p>
+                    <p>El pie de página debe incluir: <code>BREAKING CHANGE: &lt;descripción&gt;</code></p>
+                </div>
+            </div>
+            <div class="hotfix-box">
+                <div style="font-size:20px;flex-shrink:0;margin-top:2px;">🔥</div>
+                <div style="min-width:0;flex:1;">
+                    <h3>Hotfix</h3>
+                    <p>Una corrección urgente aplicada directamente sobre producción sin pasar por el flujo habitual.
+                        Usa <code>fix</code> como tipo. Si rompe compatibilidad, añade <code>!</code>.</p>
+                    <div class="hotfix-example">fix(auth): corregir bypass de autenticación en /admin<br><br><span
+                            class="hotfix-note">BREAKING CHANGE: la sesión ahora expira en 30 min por defecto.</span>
+                    </div>
+                    <p>Si tu equipo usa ramas dedicadas (<code>hotfix/nombre</code>), haz el merge con el mensaje
+                        estándar de git y el commit de <code>fix</code> dentro de esa rama.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="trailers">
+            <div class="section-header">
+                <h2>Trailers (Metadatos)</h2>
+                <div class="line"></div>
+            </div>
+            <div class="rules-list">
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>Se añaden al <strong>final del commit</strong>, tras una línea vacía.</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span><strong>Cerrar tickets:</strong> <code>Resolves #123</code> o
+                        <code>Fixes JIRA-456</code>.</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span><strong>Autoría compartida:</strong> <code>Co-authored-by: Nombre &lt;email&gt;</code>.</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span><strong>Referencias:</strong> <code>Refs: #890</code> para enlazar a un ticket sin cerrarlo
+                        automáticamente.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="descripcion">
+            <div class="section-header">
+                <h2>Redactar la descripción</h2>
+                <div class="line"></div>
+            </div>
+            <div class="rules-list">
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>La descripción es <strong>obligatoria</strong></span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>Usa imperativo en presente: <em>"change"</em> no <em>"changed"</em> ni
+                        <em>"changes"</em></span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◆</span>
+                    <span>Piensa: <em>«Este commit va a…»</em> o <em>«Este commit debería…»</em></span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◇</span>
+                    <span>No empieces la descripción con mayúscula</span>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-icon">◇</span>
+                    <span>No termines con punto — <code>.</code></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="versionado">
+            <div class="section-header">
+                <h2>Versionado semántico</h2>
+                <div class="line"></div>
+            </div>
+            <table class="version-table">
+                <thead>
+                    <tr>
+                        <th>Si el commit contiene…</th>
+                        <th>Incrementa</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Breaking changes — <code>!</code> o <code>BREAKING CHANGE</code></td>
+                        <td><span class="bump bump-major">MAJOR</span></td>
+                        <td><code>1.0.0 → 2.0.0</code></td>
+                    </tr>
+                    <tr>
+                        <td>Cambios de API/UI — <code>feat</code> o <code>fix</code></td>
+                        <td><span class="bump bump-minor">MINOR</span></td>
+                        <td><code>1.0.0 → 1.1.0</code></td>
+                    </tr>
+                    <tr>
+                        <td>Cualquier otro tipo</td>
+                        <td><span class="bump bump-patch">PATCH</span></td>
+                        <td><code>1.0.0 → 1.0.1</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="flowchart">
+            <div class="section-header">
+                <h2>¿Qué tipo uso?</h2>
+                <div class="line"></div>
+            </div>
+            <div class="flow-container">
+                <div class="flow">
+                    <div class="flow-step">
+                        <div class="flow-question">¿Corrige un bug?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-fix">fix</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Cambia funcionalidad o UI?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-feat">feat</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Mejora de rendimiento?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-perf">perf</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Restructura código sin cambiar comportamiento?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-refactor">refactor</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Solo formato o estilo de código?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-style">style</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Añade o corrige tests?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-test">test</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Solo documentación?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-docs">docs</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Afecta al build, dependencias o versión?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-build">build</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Afecta a infra, CI/CD o despliegue?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-ops">ops</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">Mantenimiento o tarea sin código de producto</div>
+                        <span class="flow-yes">→</span>
+                        <span class="flow-result t-chore">chore</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ejemplos">
+            <div class="section-header">
+                <h2>Ejemplos</h2>
+                <div class="line"></div>
+            </div>
+            <p class="examples-hint">haz clic en cualquier ejemplo para copiarlo</p>
+            <div class="examples-list">
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-feat">feat</span>
+                    <span class="example-text">feat: añadir notificaciones por email en nuevos mensajes directos</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-feat">feat</span>
+                    <span class="example-text">feat(carrito): añadir el botón de compra exprés</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix" style="background:var(--red-dim);color:var(--red)">feat!</span>
+                    <span class="example-text">feat!: eliminar endpoint de listado de tickets<br><span
+                            style="color:var(--muted)">refs JIRA-1337 · BREAKING CHANGE: el endpoint ya no lista todas
+                            las entidades</span></span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-fix">fix</span>
+                    <span class="example-text">fix(carrito): evitar hacer pedido con carrito vacío</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-fix">fix</span>
+                    <span class="example-text">fix(api): corregir cálculo incorrecto del checksum del body</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-perf">perf</span>
+                    <span class="example-text">perf: reducir uso de memoria en visitantes únicos usando
+                        HyperLogLog</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-refactor">refactor</span>
+                    <span class="example-text">refactor: implementar cálculo de Fibonacci como recursión</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-style">style</span>
+                    <span class="example-text">style: eliminar línea vacía sobrante</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-test">test</span>
+                    <span class="example-text">test(auth): añadir tests unitarios para el middleware de sesión</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-docs">docs</span>
+                    <span class="example-text">docs(readme): añadir ejemplos de uso del CLI</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-build">build</span>
+                    <span class="example-text">build: actualizar dependencias</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-build">build</span>
+                    <span class="example-text">build(release): bump version to 1.0.0</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-ops">ops</span>
+                    <span class="example-text">ops(ci): añadir paso de lint al pipeline de GitHub Actions</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-refs">
+                <span>referencias</span>
+                <a href="https://www.conventionalcommits.org/" target="_blank">conventionalcommits.org</a>
+                <a href="https://github.com/angular/angular/blob/master/CONTRIBUTING.md" target="_blank">angular
+                    contributing guide</a>
+                <a href="https://github.com/qoomon/git-conventional-commits" target="_blank">git-conventional-commits
+                    (CLI)</a>
+            </div>
+            <div class="footer-note">
+                Basado en el cheatsheet de<br>
+                <a href="https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13" target="_blank">@qoomon</a>
+            </div>
+        </footer>
+
+    </div>
+    <script>
+        function copyFormat(btn) {
+            const text = 'git commit -m"<tipo>(<ámbito opcional>): <descripción>" \\\n  -m"<cuerpo opcional>" \\\n  -m"<pie de página opcional>"';
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = '¡copiado!';
+                btn.style.color = 'var(--green)';
+                btn.style.borderColor = 'var(--green)';
+                setTimeout(() => { btn.textContent = 'copiar'; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
+            });
+        }
+        function copyExample(el) {
+            const text = el.querySelector('.example-text').innerText.split('\n')[0].trim();
+            navigator.clipboard.writeText(text).then(() => {
+                el.classList.add('copied');
+                const hint = el.querySelector('.example-copy');
+                if (hint) { hint.textContent = '✓'; hint.style.color = 'var(--green)'; hint.style.opacity = '1'; }
+                setTimeout(() => {
+                    el.classList.remove('copied');
+                    if (hint) { hint.textContent = 'copiar'; hint.style.color = ''; hint.style.opacity = ''; }
+                }, 1800);
+            });
+        }
+        function filterTypes(val) {
+            const q = val.toLowerCase();
+            document.querySelectorAll('.type-row').forEach(row => {
+                const tag = row.querySelector('.type-tag').textContent.toLowerCase();
+                const desc = row.querySelector('.type-desc').textContent.toLowerCase();
+                row.classList.toggle('hidden', q.length > 0 && !tag.includes(q) && !desc.includes(q));
+            });
+        }
+
+        // Generator Functions
+        function toggleBreaking() {
+            // Unused directly
+        }
+
+        function updatePreview() {
+            const type = document.getElementById('g-type').value;
+            const scope = document.getElementById('g-scope').value.trim();
+            const isBreaking = document.getElementById('g-breaking').checked;
+            const desc = document.getElementById('g-desc').value.trim();
+            const trailer = document.getElementById('g-trailer').value.trim();
+
+            let commit = type || '<tipo>';
+            if (scope) commit += `(${scope})`;
+            if (isBreaking) commit += '!';
+            commit += ': ';
+            commit += desc || '<descripción>';
+
+            if (trailer) {
+                commit += `\n\n${trailer}`;
+            }
+
+            document.getElementById('g-preview').textContent = `git commit -m "${commit.replace(/\n\n/g, '" -m "')}"`;
+        }
+
+        function copyGenerator(btn) {
+            const text = document.getElementById('g-preview').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const span = btn.querySelector('span');
+                const originalText = span ? span.textContent : btn.textContent;
+                if (span) span.textContent = '¡Copiado!';
+                else btn.textContent = '¡Copiado!';
+                btn.style.backgroundColor = 'var(--green)';
+                btn.style.color = '#fff';
+                btn.style.borderColor = 'var(--green)';
+                setTimeout(() => {
+                    if (span) span.textContent = originalText;
+                    else btn.textContent = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                    btn.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // Initialize generator on load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (document.getElementById('g-type')) {
+                updatePreview();
+            }
+
+            // Highlight active TOC link on scroll
+            const sections = document.querySelectorAll('section[id], header[id]');
+            const navLinks = document.querySelectorAll('.toc a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
