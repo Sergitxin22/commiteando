@@ -12,11 +12,82 @@
     <meta property="og:type" content="website">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <title>Conventional Commits — Guía Rápida</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@500;700;800&display=swap"
-        rel="stylesheet">
     <style>
+        /* Inter */
+        @font-face {
+            font-family: "Inter";
+            src: local("Inter"),
+                url("./assets/fonts/inter-normal-400.woff2") format("woff2"),
+                url("./assets/fonts/inter-normal-400.ttf") format("truetype");
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "Inter";
+            src: local("Inter Medium"), local("Inter-Medium"),
+                url("./assets/fonts/inter-normal-500.woff2") format("woff2"),
+                url("./assets/fonts/inter-normal-500.ttf") format("truetype");
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "Inter";
+            src: local("Inter SemiBold"), local("Inter-SemiBold"),
+                url("./assets/fonts/inter-normal-600.woff2") format("woff2"),
+                url("./assets/fonts/inter-normal-600.ttf") format("truetype");
+            font-weight: 600;
+            font-display: swap;
+        }
+
+        /* JetBrains Mono */
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: local("JetBrains Mono"), local("JetBrainsMono-Regular"),
+                url("./assets/fonts/jetbrains-mono-normal-400.woff2") format("woff2"),
+                url("./assets/fonts/jetbrains-mono-normal-400.ttf") format("truetype");
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: local("JetBrains Mono Medium"), local("JetBrainsMono-Medium"),
+                url("./assets/fonts/jetbrains-mono-normal-500.woff2") format("woff2"),
+                url("./assets/fonts/jetbrains-mono-normal-500.ttf") format("truetype");
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "JetBrains Mono";
+            src: local("JetBrains Mono Bold"), local("JetBrainsMono-Bold"),
+                url("./assets/fonts/jetbrains-mono-normal-700.woff2") format("woff2"),
+                url("./assets/fonts/jetbrains-mono-normal-700.ttf") format("truetype");
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        /* Syne */
+        @font-face {
+            font-family: "Syne";
+            src: local("Syne Medium"), local("Syne-Medium"),
+                url("./assets/fonts/syne-normal-500.woff2") format("woff2"),
+                url("./assets/fonts/syne-normal-500.ttf") format("truetype");
+            font-weight: 500;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: "Syne";
+            src: local("Syne Bold"), local("Syne-Bold"),
+                url("./assets/fonts/syne-normal-700.woff2") format("woff2"),
+                url("./assets/fonts/syne-normal-700.ttf") format("truetype");
+            font-weight: 700;
+            font-display: swap;
+        }
+
         :root {
             --bg: #0d0d0f;
             --surface: #141416;
