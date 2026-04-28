@@ -492,6 +492,11 @@
             color: #fb923c;
         }
 
+        .t-ci {
+            background: rgba(45, 212, 191, 0.08);
+            color: #2dd4bf;
+        }
+
         .t-ops {
             background: rgba(34, 211, 238, 0.08);
             color: #22d3ee;
@@ -1267,7 +1272,7 @@
             <div class="section-header">
                 <h2>Tipos de commit</h2>
                 <div class="line"></div>
-                <div class="badge">10 tipos</div>
+                <div class="badge">11 tipos</div>
             </div>
             <div class="filter-bar">
                 <span class="filter-icon">⌕</span>
@@ -1310,9 +1315,14 @@
                     </div>
                 </div>
                 <div class="type-row fade-in">
+                    <div class="type-tag t-ci">ci</div>
+                    <div class="type-desc">Automatización de integración continua: workflows, jobs, runners y checks del
+                        pipeline</div>
+                </div>
+                <div class="type-row fade-in">
                     <div class="type-tag t-ops">ops</div>
-                    <div class="type-desc">Infraestructura, scripts de despliegue, CI/CD, backups, monitoreo o
-                        recuperación</div>
+                    <div class="type-desc">Operación e infraestructura del entorno: despliegues, backups, monitoreo,
+                        observabilidad y recuperación</div>
                 </div>
                 <div class="type-row fade-in">
                     <div class="type-tag t-chore">chore</div>
@@ -1532,7 +1542,15 @@
                     <div class="flow-connector"></div>
                     <div class="flow-no">no ↓</div>
                     <div class="flow-step">
-                        <div class="flow-question">¿Afecta a infra, CI/CD o despliegue?</div>
+                        <div class="flow-question">¿Cambia la automatización de CI (workflows, jobs, checks)?</div>
+                        <span class="flow-yes">sí →</span>
+                        <span class="flow-result t-ci">ci</span>
+                    </div>
+                    <div class="flow-connector"></div>
+                    <div class="flow-no">no ↓</div>
+                    <div class="flow-step">
+                        <div class="flow-question">¿Afecta a operación/infra del entorno (deploy, monitoreo, backups)?
+                        </div>
                         <span class="flow-yes">sí →</span>
                         <span class="flow-result t-ops">ops</span>
                     </div>
@@ -1618,8 +1636,14 @@
                     <span class="example-copy">copiar</span>
                 </div>
                 <div class="example-item" onclick="copyExample(this)">
+                    <span class="example-prefix t-ci">ci</span>
+                    <span class="example-text">ci(github-actions): añadir paso de lint al workflow de
+                        pull_request</span>
+                    <span class="example-copy">copiar</span>
+                </div>
+                <div class="example-item" onclick="copyExample(this)">
                     <span class="example-prefix t-ops">ops</span>
-                    <span class="example-text">ops(ci): añadir paso de lint al pipeline de GitHub Actions</span>
+                    <span class="example-text">ops(deploy): ajustar estrategia de rollback en producción</span>
                     <span class="example-copy">copiar</span>
                 </div>
             </div>
