@@ -1184,7 +1184,7 @@
             <div class="generator-card">
                 <div class="gen-inputs">
                     <div class="gen-input-group" style="flex: 0 1 120px;">
-                        <label>Tipo *</label>
+                        <label for="g-type">Tipo *</label>
                         <select class="gen-control gen-select" id="g-type" onchange="updatePreview()">
                             <option value="feat">feat</option>
                             <option value="fix">fix</option>
@@ -1200,12 +1200,12 @@
                         </select>
                     </div>
                     <div class="gen-input-group" style="flex: 0 1 140px;">
-                        <label>Ámbito (opcional)</label>
+                        <label for="g-scope">Ámbito (opcional)</label>
                         <input type="text" class="gen-control" id="g-scope" placeholder="ej. auth"
                             oninput="updatePreview()">
                     </div>
                     <div class="gen-input-group" style="flex: 1 1 200px;">
-                        <label>Descripción breve *</label>
+                        <label for="g-desc">Descripción breve *</label>
                         <input type="text" class="gen-control" id="g-desc" placeholder="añadir validación de email..."
                             oninput="updatePreview()">
                     </div>
@@ -1219,7 +1219,7 @@
                 </div>
 
                 <div class="gen-input-group" style="margin-bottom: 20px;">
-                    <label>Metadato de cierre / Trailer (opcional)</label>
+                    <label for="g-trailer">Metadato de cierre / Trailer (opcional)</label>
                     <input type="text" class="gen-control" id="g-trailer" placeholder="ej. Resolves #123"
                         oninput="updatePreview()">
                 </div>
