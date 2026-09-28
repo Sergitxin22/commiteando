@@ -504,7 +504,7 @@
 
         .t-chore {
             background: rgba(148, 163, 184, 0.06);
-            color: #64748b;
+            color: #94a3b8;
         }
 
         /* ── RULES LIST ── */
@@ -999,7 +999,7 @@
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: #6b58e8;
             color: #fff;
             border: none;
             border-radius: 8px;
@@ -1164,490 +1164,504 @@
                 legibilidad del historial de tu proyecto.</p>
         </header>
 
-        <nav class="toc fade-in">
-            <a href="#generador">Generador</a>
-            <a href="#formato">Formato</a>
-            <a href="#tipos">Tipos validos</a>
-            <a href="#ambito">Ámbito (Scope)</a>
-            <a href="#breaking">Breaking changes</a>
-            <a href="#trailers">Trailers / Metadatos</a>
-            <a href="#flowchart">Decision Flowchart</a>
-            <a href="#ejemplos">Ejemplos para copiar</a>
-        </nav>
+        <main>
+            <nav class="toc fade-in">
+                <a href="#generador">Generador</a>
+                <a href="#formato">Formato</a>
+                <a href="#tipos">Tipos validos</a>
+                <a href="#ambito">Ámbito (Scope)</a>
+                <a href="#breaking">Breaking changes</a>
+                <a href="#trailers">Trailers / Metadatos</a>
+                <a href="#flowchart">Decision Flowchart</a>
+                <a href="#ejemplos">Ejemplos para copiar</a>
+            </nav>
 
-        <section id="generador" class="fade-in" style="animation-delay: 0.1s;">
-            <div class="section-header">
-                <h2>Generador de Commits</h2>
-                <div class="line"></div>
-                <div class="badge">Interactivo</div>
-            </div>
-            <div class="generator-card">
-                <div class="gen-inputs">
-                    <div class="gen-input-group" style="flex: 0 1 120px;">
-                        <label for="g-type">Tipo *</label>
-                        <select class="gen-control gen-select" id="g-type" onchange="updatePreview()">
-                            <option value="feat">feat</option>
-                            <option value="fix">fix</option>
-                            <option value="refactor">refactor</option>
-                            <option value="chore">chore</option>
-                            <option value="docs">docs</option>
-                            <option value="style">style</option>
-                            <option value="test">test</option>
-                            <option value="perf">perf</option>
-                            <option value="build">build</option>
-                            <option value="ci">ci</option>
-                            <option value="ops">ops</option>
-                        </select>
+            <section id="generador" class="fade-in" style="animation-delay: 0.1s;">
+                <div class="section-header">
+                    <h2>Generador de Commits</h2>
+                    <div class="line"></div>
+                    <div class="badge">Interactivo</div>
+                </div>
+                <div class="generator-card">
+                    <div class="gen-inputs">
+                        <div class="gen-input-group" style="flex: 0 1 120px;">
+                            <label for="g-type">Tipo *</label>
+                            <select class="gen-control gen-select" id="g-type" onchange="updatePreview()">
+                                <option value="feat">feat</option>
+                                <option value="fix">fix</option>
+                                <option value="refactor">refactor</option>
+                                <option value="chore">chore</option>
+                                <option value="docs">docs</option>
+                                <option value="style">style</option>
+                                <option value="test">test</option>
+                                <option value="perf">perf</option>
+                                <option value="build">build</option>
+                                <option value="ci">ci</option>
+                                <option value="ops">ops</option>
+                            </select>
+                        </div>
+                        <div class="gen-input-group" style="flex: 0 1 140px;">
+                            <label for="g-scope">Ámbito (opcional)</label>
+                            <input type="text" class="gen-control" id="g-scope" placeholder="ej. auth"
+                                oninput="updatePreview()">
+                        </div>
+                        <div class="gen-input-group" style="flex: 1 1 200px;">
+                            <label for="g-desc">Descripción breve *</label>
+                            <input type="text" class="gen-control" id="g-desc"
+                                placeholder="añadir validación de email..." oninput="updatePreview()">
+                        </div>
                     </div>
-                    <div class="gen-input-group" style="flex: 0 1 140px;">
-                        <label for="g-scope">Ámbito (opcional)</label>
-                        <input type="text" class="gen-control" id="g-scope" placeholder="ej. auth"
+
+                    <div class="gen-options-row">
+                        <label class="gen-checkbox">
+                            <input type="checkbox" id="g-breaking" onchange="updatePreview()">
+                            <span style="color:var(--red);">Es un Breaking Change (!)</span>
+                        </label>
+                    </div>
+
+                    <div class="gen-input-group" style="margin-bottom: 20px;">
+                        <label for="g-trailer">Metadato de cierre / Trailer (opcional)</label>
+                        <input type="text" class="gen-control" id="g-trailer" placeholder="ej. Resolves #123"
                             oninput="updatePreview()">
                     </div>
-                    <div class="gen-input-group" style="flex: 1 1 200px;">
-                        <label for="g-desc">Descripción breve *</label>
-                        <input type="text" class="gen-control" id="g-desc" placeholder="añadir validación de email..."
-                            oninput="updatePreview()">
-                    </div>
+
+                    <div class="gen-preview" id="g-preview">git commit -m "feat: "</div>
+
+                    <button class="btn-primary" onclick="copyGenerator(this)">
+                        <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11.5 2H4.5A1.5 1.5 0 0 0 3 3.5v9A1.5 1.5 0 0 0 4.5 14h7a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 11.5 2Zm0 1A.5.5 0 0 1 12 3.5v9a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h7Z"
+                                fill="currentColor" />
+                            <path
+                                d="M5 6.5C5 6.22 5.22 6 5.5 6h5c.28 0 .5.22.5.5S10.78 7 10.5 7h-5A.5.5 0 0 1 5 6.5Zm0 3c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5S8.78 10 8.5 10h-3A.5.5 0 0 1 5 9.5Z"
+                                fill="currentColor" />
+                        </svg>
+                        <span>Copiar comando al portapapeles</span>
+                    </button>
                 </div>
+            </section>
 
-                <div class="gen-options-row">
-                    <label class="gen-checkbox">
-                        <input type="checkbox" id="g-breaking" onchange="updatePreview()">
-                        <span style="color:var(--red);">Es un Breaking Change (!)</span>
-                    </label>
+            <section id="formato">
+                <div class="section-header">
+                    <h2>Formato general</h2>
+                    <div class="line"></div>
                 </div>
-
-                <div class="gen-input-group" style="margin-bottom: 20px;">
-                    <label for="g-trailer">Metadato de cierre / Trailer (opcional)</label>
-                    <input type="text" class="gen-control" id="g-trailer" placeholder="ej. Resolves #123"
-                        oninput="updatePreview()">
-                </div>
-
-                <div class="gen-preview" id="g-preview">git commit -m "feat: "</div>
-
-                <button class="btn-primary" onclick="copyGenerator(this)">
-                    <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M11.5 2H4.5A1.5 1.5 0 0 0 3 3.5v9A1.5 1.5 0 0 0 4.5 14h7a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 11.5 2Zm0 1A.5.5 0 0 1 12 3.5v9a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h7Z"
-                            fill="currentColor" />
-                        <path
-                            d="M5 6.5C5 6.22 5.22 6 5.5 6h5c.28 0 .5.22.5.5S10.78 7 10.5 7h-5A.5.5 0 0 1 5 6.5Zm0 3c0-.28.22-.5.5-.5h3c.28 0 .5.22.5.5S8.78 10 8.5 10h-3A.5.5 0 0 1 5 9.5Z"
-                            fill="currentColor" />
-                    </svg>
-                    <span>Copiar comando al portapapeles</span>
-                </button>
-            </div>
-        </section>
-
-        <section id="formato">
-            <div class="section-header">
-                <h2>Formato general</h2>
-                <div class="line"></div>
-            </div>
-            <div class="format-block">
-                <p class="format-label">estructura</p>
-                <pre><span class="ph-key">git commit</span> -m<span class="ph">"&lt;tipo&gt;(&lt;ámbito opcional&gt;): &lt;descripción&gt;"</span> \
+                <div class="format-block">
+                    <p class="format-label">estructura</p>
+                    <pre><span class="ph-key">git commit</span> -m<span class="ph">"&lt;tipo&gt;(&lt;ámbito opcional&gt;): &lt;descripción&gt;"</span> \
   -m<span class="ph-opt">"&lt;cuerpo opcional&gt;"</span> \
   -m<span class="ph-opt">"&lt;pie de página opcional&gt;"</span></pre>
-                <button class="copy-btn" onclick="copyFormat(this)">copiar</button>
-            </div>
-            <div class="special-grid">
-                <div class="special-card">
-                    <h3>commit inicial</h3>
-                    <code>chore: init</code>
+                    <button class="copy-btn" onclick="copyFormat(this)">copiar</button>
                 </div>
-                <div class="special-card">
-                    <h3>commit de merge</h3>
-                    <code>Merge branch '&lt;nombre-rama&gt;'</code>
+                <div class="special-grid">
+                    <div class="special-card">
+                        <h3>commit inicial</h3>
+                        <code>chore: init</code>
+                    </div>
+                    <div class="special-card">
+                        <h3>commit de merge</h3>
+                        <code>Merge branch '&lt;nombre-rama&gt;'</code>
+                    </div>
+                    <div class="special-card">
+                        <h3>commit de revert</h3>
+                        <code>Revert "&lt;mensaje original&gt;"</code>
+                    </div>
                 </div>
-                <div class="special-card">
-                    <h3>commit de revert</h3>
-                    <code>Revert "&lt;mensaje original&gt;"</code>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="tipos">
-            <div class="section-header">
-                <h2>Tipos de commit</h2>
-                <div class="line"></div>
-                <div class="badge">11 tipos</div>
-            </div>
-            <div class="filter-bar">
-                <span class="filter-icon">⌕</span>
-                <input class="filter-input" type="text" placeholder="filtrar tipos..."
-                    oninput="filterTypes(this.value)">
-            </div>
-            <div class="types-grid">
-                <div class="type-row fade-in">
-                    <div class="type-tag t-feat">feat</div>
-                    <div class="type-desc">Añade, ajusta o elimina una funcionalidad del API o la UI</div>
+            <section id="tipos">
+                <div class="section-header">
+                    <h2>Tipos de commit</h2>
+                    <div class="line"></div>
+                    <div class="badge">11 tipos</div>
                 </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-fix">fix</div>
-                    <div class="type-desc">Corrige un bug en el API o la UI</div>
+                <div class="filter-bar">
+                    <span class="filter-icon">⌕</span>
+                    <input class="filter-input" type="text" placeholder="filtrar tipos..."
+                        oninput="filterTypes(this.value)">
                 </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-refactor">refactor</div>
-                    <div class="type-desc">Reescribe o restructura código sin alterar el comportamiento observable</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-perf">perf</div>
-                    <div class="type-desc">Refactor enfocado específicamente en mejorar el rendimiento</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-style">style</div>
-                    <div class="type-desc">Estilo de código: espacios, formato, punto y coma omitidos… sin cambio de
-                        lógica</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-test">test</div>
-                    <div class="type-desc">Añade tests que faltan o corrige los existentes</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-docs">docs</div>
-                    <div class="type-desc">Cambios exclusivamente en la documentación</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-build">build</div>
-                    <div class="type-desc">Afecta al sistema de build, herramientas, dependencias o versión del proyecto
+                <div class="types-grid">
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-feat">feat</div>
+                        <div class="type-desc">Añade, ajusta o elimina una funcionalidad del API o la UI</div>
                     </div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-ci">ci</div>
-                    <div class="type-desc">Automatización de integración continua: workflows, jobs, runners y checks del
-                        pipeline</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-ops">ops</div>
-                    <div class="type-desc">Operación e infraestructura del entorno: despliegues, backups, monitoreo,
-                        observabilidad y recuperación</div>
-                </div>
-                <div class="type-row fade-in">
-                    <div class="type-tag t-chore">chore</div>
-                    <div class="type-desc">Tareas de mantenimiento: commit inicial, modificar .gitignore, etc.</div>
-                </div>
-            </div>
-        </section>
-
-        <section id="ambito">
-            <div class="section-header">
-                <h2>Ámbito (scope)</h2>
-                <div class="line"></div>
-                <div class="badge">opcional</div>
-            </div>
-            <div class="rules-list">
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>El ámbito aporta contexto adicional sobre la zona del código afectada</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>Es una parte <strong>opcional</strong> del mensaje</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>Los ámbitos permitidos varían por proyecto y suelen definirse en las guías del equipo</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◇</span>
-                    <span>No uses identificadores de issues como ámbito - p.ej. <code>#123</code></span>
-                </div>
-            </div>
-        </section>
-
-        <section id="breaking">
-            <div class="section-header">
-                <h2>Breaking changes</h2>
-                <div class="line"></div>
-            </div>
-            <div class="breaking-box">
-                <div style="font-size:20px;flex-shrink:0;margin-top:2px;">⚠</div>
-                <div>
-                    <h3>Cambios incompatibles</h3>
-                    <p>Un commit que introduce un cambio incompatible debe marcarse con <code>!</code> antes del
-                        <code>:</code> en el asunto.
-                    </p>
-                    <p>Ejemplo: <code>feat(api)!: eliminar endpoint de estado</code></p>
-                    <p>El pie de página debe incluir: <code>BREAKING CHANGE: &lt;descripción&gt;</code></p>
-                </div>
-            </div>
-            <div class="hotfix-box">
-                <div style="font-size:20px;flex-shrink:0;margin-top:2px;">🔥</div>
-                <div style="min-width:0;flex:1;">
-                    <h3>Hotfix</h3>
-                    <p>Una corrección urgente aplicada directamente sobre producción sin pasar por el flujo habitual.
-                        Usa <code>fix</code> como tipo. Si rompe compatibilidad, añade <code>!</code>.</p>
-                    <div class="hotfix-example">fix(auth): corregir bypass de autenticación en /admin<br><br><span
-                            class="hotfix-note">BREAKING CHANGE: la sesión ahora expira en 30 min por defecto.</span>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-fix">fix</div>
+                        <div class="type-desc">Corrige un bug en el API o la UI</div>
                     </div>
-                    <p>Si tu equipo usa ramas dedicadas (<code>hotfix/nombre</code>), haz el merge con el mensaje
-                        estándar de git y el commit de <code>fix</code> dentro de esa rama.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="trailers">
-            <div class="section-header">
-                <h2>Trailers (Metadatos)</h2>
-                <div class="line"></div>
-            </div>
-            <div class="rules-list">
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>Se añaden al <strong>final del commit</strong>, tras una línea vacía.</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span><strong>Cerrar tickets:</strong> <code>Resolves #123</code> o
-                        <code>Fixes JIRA-456</code>.</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span><strong>Autoría compartida:</strong> <code>Co-authored-by: Nombre &lt;email&gt;</code>.</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span><strong>Referencias:</strong> <code>Refs: #890</code> para enlazar a un ticket sin cerrarlo
-                        automáticamente.</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="descripcion">
-            <div class="section-header">
-                <h2>Redactar la descripción</h2>
-                <div class="line"></div>
-            </div>
-            <div class="rules-list">
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>La descripción es <strong>obligatoria</strong></span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>Usa imperativo en presente: <em>"change"</em> no <em>"changed"</em> ni
-                        <em>"changes"</em></span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◆</span>
-                    <span>Piensa: <em>«Este commit va a…»</em> o <em>«Este commit debería…»</em></span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◇</span>
-                    <span>No empieces la descripción con mayúscula</span>
-                </div>
-                <div class="rule-item">
-                    <span class="rule-icon">◇</span>
-                    <span>No termines con punto - <code>.</code></span>
-                </div>
-            </div>
-        </section>
-
-        <section id="versionado">
-            <div class="section-header">
-                <h2>Versionado semántico</h2>
-                <div class="line"></div>
-            </div>
-            <table class="version-table">
-                <thead>
-                    <tr>
-                        <th>Si el commit contiene…</th>
-                        <th>Incrementa</th>
-                        <th>Ejemplo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Breaking changes - <code>!</code> o <code>BREAKING CHANGE</code></td>
-                        <td><span class="bump bump-major">MAJOR</span></td>
-                        <td><code>1.0.0 → 2.0.0</code></td>
-                    </tr>
-                    <tr>
-                        <td>Cambios de API/UI - <code>feat</code> o <code>fix</code></td>
-                        <td><span class="bump bump-minor">MINOR</span></td>
-                        <td><code>1.0.0 → 1.1.0</code></td>
-                    </tr>
-                    <tr>
-                        <td>Cualquier otro tipo</td>
-                        <td><span class="bump bump-patch">PATCH</span></td>
-                        <td><code>1.0.0 → 1.0.1</code></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <section id="flowchart">
-            <div class="section-header">
-                <h2>¿Qué tipo uso?</h2>
-                <div class="line"></div>
-            </div>
-            <div class="flow-container">
-                <div class="flow">
-                    <div class="flow-step">
-                        <div class="flow-question">¿Corrige un bug?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-fix">fix</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Cambia funcionalidad o UI?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-feat">feat</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Mejora de rendimiento?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-perf">perf</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Restructura código sin cambiar comportamiento?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-refactor">refactor</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Solo formato o estilo de código?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-style">style</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Añade o corrige tests?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-test">test</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Solo documentación?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-docs">docs</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Afecta al build, dependencias o versión?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-build">build</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Cambia la automatización de CI (workflows, jobs, checks)?</div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-ci">ci</span>
-                    </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">¿Afecta a operación/infra del entorno (deploy, monitoreo, backups)?
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-refactor">refactor</div>
+                        <div class="type-desc">Reescribe o restructura código sin alterar el comportamiento observable
                         </div>
-                        <span class="flow-yes">sí →</span>
-                        <span class="flow-result t-ops">ops</span>
                     </div>
-                    <div class="flow-connector"></div>
-                    <div class="flow-no">no ↓</div>
-                    <div class="flow-step">
-                        <div class="flow-question">Mantenimiento o tarea sin código de producto</div>
-                        <span class="flow-yes">→</span>
-                        <span class="flow-result t-chore">chore</span>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-perf">perf</div>
+                        <div class="type-desc">Refactor enfocado específicamente en mejorar el rendimiento</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-style">style</div>
+                        <div class="type-desc">Estilo de código: espacios, formato, punto y coma omitidos… sin cambio de
+                            lógica</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-test">test</div>
+                        <div class="type-desc">Añade tests que faltan o corrige los existentes</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-docs">docs</div>
+                        <div class="type-desc">Cambios exclusivamente en la documentación</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-build">build</div>
+                        <div class="type-desc">Afecta al sistema de build, herramientas, dependencias o versión del
+                            proyecto
+                        </div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-ci">ci</div>
+                        <div class="type-desc">Automatización de integración continua: workflows, jobs, runners y checks
+                            del
+                            pipeline</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-ops">ops</div>
+                        <div class="type-desc">Operación e infraestructura del entorno: despliegues, backups, monitoreo,
+                            observabilidad y recuperación</div>
+                    </div>
+                    <div class="type-row fade-in">
+                        <div class="type-tag t-chore">chore</div>
+                        <div class="type-desc">Tareas de mantenimiento: commit inicial, modificar .gitignore, etc.</div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section id="ejemplos">
-            <div class="section-header">
-                <h2>Ejemplos</h2>
-                <div class="line"></div>
-            </div>
-            <p class="examples-hint">haz clic en cualquier ejemplo para copiarlo</p>
-            <div class="examples-list">
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-feat">feat</span>
-                    <span class="example-text">feat: añadir notificaciones por email en nuevos mensajes directos</span>
-                    <span class="example-copy">copiar</span>
+            <section id="ambito">
+                <div class="section-header">
+                    <h2>Ámbito (scope)</h2>
+                    <div class="line"></div>
+                    <div class="badge">opcional</div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-feat">feat</span>
-                    <span class="example-text">feat(carrito): añadir el botón de compra exprés</span>
-                    <span class="example-copy">copiar</span>
+                <div class="rules-list">
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>El ámbito aporta contexto adicional sobre la zona del código afectada</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>Es una parte <strong>opcional</strong> del mensaje</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>Los ámbitos permitidos varían por proyecto y suelen definirse en las guías del
+                            equipo</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◇</span>
+                        <span>No uses identificadores de issues como ámbito - p.ej. <code>#123</code></span>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix" style="background:var(--red-dim);color:var(--red)">feat!</span>
-                    <span class="example-text">feat!: eliminar endpoint de listado de tickets<br><span
-                            style="color:var(--muted)">refs JIRA-1337 · BREAKING CHANGE: el endpoint ya no lista todas
-                            las entidades</span></span>
-                    <span class="example-copy">copiar</span>
+            </section>
+
+            <section id="breaking">
+                <div class="section-header">
+                    <h2>Breaking changes</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-fix">fix</span>
-                    <span class="example-text">fix(carrito): evitar hacer pedido con carrito vacío</span>
-                    <span class="example-copy">copiar</span>
+                <div class="breaking-box">
+                    <div style="font-size:20px;flex-shrink:0;margin-top:2px;">⚠</div>
+                    <div>
+                        <h3>Cambios incompatibles</h3>
+                        <p>Un commit que introduce un cambio incompatible debe marcarse con <code>!</code> antes del
+                            <code>:</code> en el asunto.
+                        </p>
+                        <p>Ejemplo: <code>feat(api)!: eliminar endpoint de estado</code></p>
+                        <p>El pie de página debe incluir: <code>BREAKING CHANGE: &lt;descripción&gt;</code></p>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-fix">fix</span>
-                    <span class="example-text">fix(api): corregir cálculo incorrecto del checksum del body</span>
-                    <span class="example-copy">copiar</span>
+                <div class="hotfix-box">
+                    <div style="font-size:20px;flex-shrink:0;margin-top:2px;">🔥</div>
+                    <div style="min-width:0;flex:1;">
+                        <h3>Hotfix</h3>
+                        <p>Una corrección urgente aplicada directamente sobre producción sin pasar por el flujo
+                            habitual.
+                            Usa <code>fix</code> como tipo. Si rompe compatibilidad, añade <code>!</code>.</p>
+                        <div class="hotfix-example">fix(auth): corregir bypass de autenticación en /admin<br><br><span
+                                class="hotfix-note">BREAKING CHANGE: la sesión ahora expira en 30 min por
+                                defecto.</span>
+                        </div>
+                        <p>Si tu equipo usa ramas dedicadas (<code>hotfix/nombre</code>), haz el merge con el mensaje
+                            estándar de git y el commit de <code>fix</code> dentro de esa rama.</p>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-perf">perf</span>
-                    <span class="example-text">perf: reducir uso de memoria en visitantes únicos usando
-                        HyperLogLog</span>
-                    <span class="example-copy">copiar</span>
+            </section>
+
+            <section id="trailers">
+                <div class="section-header">
+                    <h2>Trailers (Metadatos)</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-refactor">refactor</span>
-                    <span class="example-text">refactor: implementar cálculo de Fibonacci como recursión</span>
-                    <span class="example-copy">copiar</span>
+                <div class="rules-list">
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>Se añaden al <strong>final del commit</strong>, tras una línea vacía.</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span><strong>Cerrar tickets:</strong> <code>Resolves #123</code> o
+                            <code>Fixes JIRA-456</code>.</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span><strong>Autoría compartida:</strong>
+                            <code>Co-authored-by: Nombre &lt;email&gt;</code>.</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span><strong>Referencias:</strong> <code>Refs: #890</code> para enlazar a un ticket sin
+                            cerrarlo
+                            automáticamente.</span>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-style">style</span>
-                    <span class="example-text">style: eliminar línea vacía sobrante</span>
-                    <span class="example-copy">copiar</span>
+            </section>
+
+            <section id="descripcion">
+                <div class="section-header">
+                    <h2>Redactar la descripción</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-test">test</span>
-                    <span class="example-text">test(auth): añadir tests unitarios para el middleware de sesión</span>
-                    <span class="example-copy">copiar</span>
+                <div class="rules-list">
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>La descripción es <strong>obligatoria</strong></span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>Usa imperativo en presente: <em>"change"</em> no <em>"changed"</em> ni
+                            <em>"changes"</em></span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◆</span>
+                        <span>Piensa: <em>«Este commit va a…»</em> o <em>«Este commit debería…»</em></span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◇</span>
+                        <span>No empieces la descripción con mayúscula</span>
+                    </div>
+                    <div class="rule-item">
+                        <span class="rule-icon">◇</span>
+                        <span>No termines con punto - <code>.</code></span>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-docs">docs</span>
-                    <span class="example-text">docs(readme): añadir ejemplos de uso del CLI</span>
-                    <span class="example-copy">copiar</span>
+            </section>
+
+            <section id="versionado">
+                <div class="section-header">
+                    <h2>Versionado semántico</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-build">build</span>
-                    <span class="example-text">build: actualizar dependencias</span>
-                    <span class="example-copy">copiar</span>
+                <table class="version-table">
+                    <thead>
+                        <tr>
+                            <th>Si el commit contiene…</th>
+                            <th>Incrementa</th>
+                            <th>Ejemplo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Breaking changes - <code>!</code> o <code>BREAKING CHANGE</code></td>
+                            <td><span class="bump bump-major">MAJOR</span></td>
+                            <td><code>1.0.0 → 2.0.0</code></td>
+                        </tr>
+                        <tr>
+                            <td>Cambios de API/UI - <code>feat</code> o <code>fix</code></td>
+                            <td><span class="bump bump-minor">MINOR</span></td>
+                            <td><code>1.0.0 → 1.1.0</code></td>
+                        </tr>
+                        <tr>
+                            <td>Cualquier otro tipo</td>
+                            <td><span class="bump bump-patch">PATCH</span></td>
+                            <td><code>1.0.0 → 1.0.1</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="flowchart">
+                <div class="section-header">
+                    <h2>¿Qué tipo uso?</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-build">build</span>
-                    <span class="example-text">build(release): bump version to 1.0.0</span>
-                    <span class="example-copy">copiar</span>
+                <div class="flow-container">
+                    <div class="flow">
+                        <div class="flow-step">
+                            <div class="flow-question">¿Corrige un bug?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-fix">fix</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Cambia funcionalidad o UI?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-feat">feat</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Mejora de rendimiento?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-perf">perf</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Restructura código sin cambiar comportamiento?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-refactor">refactor</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Solo formato o estilo de código?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-style">style</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Añade o corrige tests?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-test">test</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Solo documentación?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-docs">docs</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Afecta al build, dependencias o versión?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-build">build</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Cambia la automatización de CI (workflows, jobs, checks)?</div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-ci">ci</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">¿Afecta a operación/infra del entorno (deploy, monitoreo,
+                                backups)?
+                            </div>
+                            <span class="flow-yes">sí →</span>
+                            <span class="flow-result t-ops">ops</span>
+                        </div>
+                        <div class="flow-connector"></div>
+                        <div class="flow-no">no ↓</div>
+                        <div class="flow-step">
+                            <div class="flow-question">Mantenimiento o tarea sin código de producto</div>
+                            <span class="flow-yes">→</span>
+                            <span class="flow-result t-chore">chore</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-ci">ci</span>
-                    <span class="example-text">ci(github-actions): añadir paso de lint al workflow de
-                        pull_request</span>
-                    <span class="example-copy">copiar</span>
+            </section>
+
+            <section id="ejemplos">
+                <div class="section-header">
+                    <h2>Ejemplos</h2>
+                    <div class="line"></div>
                 </div>
-                <div class="example-item" onclick="copyExample(this)">
-                    <span class="example-prefix t-ops">ops</span>
-                    <span class="example-text">ops(deploy): ajustar estrategia de rollback en producción</span>
-                    <span class="example-copy">copiar</span>
+                <p class="examples-hint">haz clic en cualquier ejemplo para copiarlo</p>
+                <div class="examples-list">
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-feat">feat</span>
+                        <span class="example-text">feat: añadir notificaciones por email en nuevos mensajes
+                            directos</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-feat">feat</span>
+                        <span class="example-text">feat(carrito): añadir el botón de compra exprés</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix" style="background:var(--red-dim);color:var(--red)">feat!</span>
+                        <span class="example-text">feat!: eliminar endpoint de listado de tickets<br><span
+                                style="color:var(--muted)">refs JIRA-1337 · BREAKING CHANGE: el endpoint ya no lista
+                                todas
+                                las entidades</span></span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-fix">fix</span>
+                        <span class="example-text">fix(carrito): evitar hacer pedido con carrito vacío</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-fix">fix</span>
+                        <span class="example-text">fix(api): corregir cálculo incorrecto del checksum del body</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-perf">perf</span>
+                        <span class="example-text">perf: reducir uso de memoria en visitantes únicos usando
+                            HyperLogLog</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-refactor">refactor</span>
+                        <span class="example-text">refactor: implementar cálculo de Fibonacci como recursión</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-style">style</span>
+                        <span class="example-text">style: eliminar línea vacía sobrante</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-test">test</span>
+                        <span class="example-text">test(auth): añadir tests unitarios para el middleware de
+                            sesión</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-docs">docs</span>
+                        <span class="example-text">docs(readme): añadir ejemplos de uso del CLI</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-build">build</span>
+                        <span class="example-text">build: actualizar dependencias</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-build">build</span>
+                        <span class="example-text">build(release): bump version to 1.0.0</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-ci">ci</span>
+                        <span class="example-text">ci(github-actions): añadir paso de lint al workflow de
+                            pull_request</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
+                    <div class="example-item" onclick="copyExample(this)">
+                        <span class="example-prefix t-ops">ops</span>
+                        <span class="example-text">ops(deploy): ajustar estrategia de rollback en producción</span>
+                        <span class="example-copy">copiar</span>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
         <footer>
             <div class="footer-refs">
